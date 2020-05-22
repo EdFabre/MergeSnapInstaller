@@ -9,7 +9,8 @@ This project is a Shell Script which will automatically install and configure yo
 To obtain the script, just run the below commands using ```wget```
 
 ```bash
-wget 
+wget https://github.com/EdFabre/MergeSnapInstaller/archive/mergesnap-v1.0.tar.gz
+tar -xzf mergesnap-v1.0.tar.gz
 ```
 
 ## Usage
