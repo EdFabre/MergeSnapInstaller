@@ -176,7 +176,7 @@ d_value='false'
 y_value='/var/log/'
 
 # Set Log File
-LOG_FILE=$y_value'/mergerfs_snapraid_install.log'
+LOG_FILE=$y_value'/mergesnap.log'
 
 while getopts 'qudhy:p:' OPTION; do
     case "$OPTION" in
