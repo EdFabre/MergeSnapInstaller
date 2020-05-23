@@ -24,7 +24,7 @@ Options:
 -u              Runs the script in uninstall mode removing installed elements
 -d              Runs the script in debug mode, very loud output
 -h              Prints help menu, which you are currently reading
--y /var/log/    Path to write log file
+-y /var/log/    Path to write log file. Default is /var/log
 -p N            Runs script non-interactively with N parity disks
 ```
 
