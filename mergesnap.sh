@@ -22,6 +22,7 @@ set -u
 set -o pipefail
 
 # Global Variables
+SCRIPT_NAME=mergesnap
 SNAPRAID_CONFIG_PATH=/etc/snapraid.conf
 SNAPRAID_AUTOMATION_SCRIPT_SOURCE=snapraid_sync.sh
 SNAPRAID_AUTOMATION_SCRIPT_EMAIL=null
@@ -176,7 +177,7 @@ d_value='false'
 y_value='/var/log/'
 
 # Set Log File
-LOG_FILE=$y_value'/mergesnap.log'
+LOG_FILE=$y_value'/'$SCRIPT_NAME.log
 
 while getopts 'qudhy:p:' OPTION; do
     case "$OPTION" in
