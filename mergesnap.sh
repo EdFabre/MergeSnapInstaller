@@ -4,7 +4,7 @@
 # configure your system to work with MergerFS and SnapRAID.
 # 
 # Usage:
-# ./merge_snap_installer [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
+# ./mergesnap.sh [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
 # 
 # Options:
 # -q              Runs script non-interactively using defaults

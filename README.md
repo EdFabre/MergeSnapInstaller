@@ -17,7 +17,7 @@ cd MergeSnapInstaller-mergesnap-v1.0
 
 ```sh
 Usage:
-./merge_snap_installer [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
+./mergesnap.sh [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
 
 Options:
 -q              Runs script non-interactively using defaults
