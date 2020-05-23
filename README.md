@@ -11,6 +11,7 @@ To obtain the script, just run the below commands using ```wget```
 ```bash
 wget https://github.com/EdFabre/MergeSnapInstaller/archive/mergesnap-v1.0.tar.gz
 tar -xzf mergesnap-v1.0.tar.gz
+cd mergesnap-v1.0
 ```
 
 ## Usage
