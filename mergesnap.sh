@@ -1,12 +1,13 @@
 #!/bin/bash
 #######################################################################
-# This project is a Shell Script which will automatically install and 
+# This project is a Shell Script which will automatically install and
 # configure your system to work with MergerFS and SnapRAID.
-# 
+#
 # Usage:
-# ./mergesnap.sh [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
-# 
+# ./mergesnap.sh [-t] [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
+#
 # Options:
+# -t              Runs the script in trial mode, shows what will happen if this flag removed
 # -q              Runs script non-interactively using defaults
 # -u              Runs the script in uninstall mode removing installed elements
 # -d              Runs the script in debug mode, very loud output
@@ -53,10 +54,16 @@ function split() {
 
 function partition_disks() {
     echo "I: Partitioning Disks for Merger-Snapraid" |& tee -a $LOG_FILE
-    currBootDiskPart=$(eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"'); echo $PKNAME)
+    currBootDiskPart=$(
+        eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"')
+        echo $PKNAME
+    )
     currBootDisk=$(echo $currBootDiskPart | sed 's/[0-9]*$//')
     currBootDiskPath=/dev/$currBootDisk
-    curridracVFlash=$(eval $(lsblk -oNAME,MODEL -P | grep "Virtual_Flash"); echo $NAME)
+    curridracVFlash=$(
+        eval $(lsblk -oNAME,MODEL -P | grep "Virtual_Flash")
+        echo $NAME
+    )
 
     if [ -z "$curridracVFlash" ]; then
         disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk"))
@@ -80,6 +87,12 @@ function partition_disks() {
     echo "I: Parity disks are: "${paritydisks[@]}"" |& tee -a $LOG_FILE
     echo "I: There are a total of $numdatadisks disks available for data" |& tee -a $LOG_FILE
     echo "I: Data disks are: "${datadisks[@]}"" |& tee -a $LOG_FILE
+
+    # Stop script if flag exists
+    if [ "$t_value" = "true" ]; then
+        echo "W: Script ending here! Remove the '-t' flag to run whole script" |& tee -a $LOG_FILE
+        exit 0
+    fi
 
     for i in "${paritydisks[@]}"; do
         local disk=/${tempBootDiskArr[0]}/$i
@@ -181,14 +194,19 @@ function uninstall() {
 # Default flag values
 p_value='none'
 q_value='false'
+t_value='false'
 d_value='false'
 y_value='/var/log/'
 
 # Set Log File
 LOG_FILE=$y_value'/'$SCRIPT_NAME.log
 
-while getopts 'qudhy:p:' OPTION; do
+while getopts 'tqudhy:p:' OPTION; do
     case "$OPTION" in
+    t)
+        t_value='true'
+        ;;
+
     q)
         q_value='true'
         ;;
@@ -199,9 +217,10 @@ while getopts 'qudhy:p:' OPTION; do
 
     h)
         echo "Usage:"
-        echo "$(basename $0) [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]"
+        echo "$(basename $0) [-t] [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]"
         echo ""
         echo "Options:"
+        echo "  -t              Runs the script in trial mode, shows what will happen if this flag removed"
         echo "  -q              Runs script non-interactively using defaults"
         echo "  -u              Runs the script in uninstall mode removing installed elements"
         echo "  -d              Runs the script in debug mode, very loud output"
