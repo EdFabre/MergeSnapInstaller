@@ -248,9 +248,10 @@ while getopts 'tqudhy:p:' OPTION; do
 
     ?)
         echo "Usage:"
-        echo "$(basename $0) [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]"
+        echo "$(basename $0) [-t] [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]"
         echo ""
         echo "Options:"
+        echo "  -t              Runs the script in trial mode, shows what will happen if this flag removed"
         echo "  -q              Runs script non-interactively using defaults"
         echo "  -u              Runs the script in uninstall mode removing installed elements"
         echo "  -d              Runs the script in debug mode, very loud output"

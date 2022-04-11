@@ -17,9 +17,10 @@ cd MergeSnapInstaller-mergesnap-v1.1
 
 ```sh
 Usage:
-./mergesnap.sh [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
+./mergesnap.sh [-t] [-q] [-u] [-d] [-h] [-y path_to_log] [-p someinteger]
 
 Options:
+-t              Runs the script in trial mode, shows what will happen if this flag removed
 -q              Runs script non-interactively using defaults
 -u              Runs the script in uninstall mode removing installed elements
 -d              Runs the script in debug mode, very loud output
@@ -28,7 +29,6 @@ Options:
 -p N            Runs script non-interactively with N parity disks
 ```
 
-## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 
