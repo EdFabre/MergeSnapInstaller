@@ -53,14 +53,21 @@ function split() {
 
 function partition_disks() {
     echo "I: Partitioning Disks for Merger-Snapraid" |& tee -a $LOG_FILE
-    tempBootDiskArr=($(split "$(df -h | grep /boot | awk '{print $1'})" "/"))
-    currBootDiskPart=${tempBootDiskArr[1]}
-    currBootDisk=${currBootDiskPart%?}
-    currBootDiskPath=/${tempBootDiskArr[0]}/$currBootDisk
-    echo "I: Current Boot Disk is '$currBootDisk'" |& tee -a $LOG_FILE
-    echo "I: Current Boot Disk partition is '$currBootDiskPart'" |& tee -a $LOG_FILE
-    echo "I: Current Boot Disk Path is '$currBootDiskPath'" |& tee -a $LOG_FILE
-    disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk"))
+    currBootDiskPart=$(eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"'); echo $PKNAME)
+    currBootDisk=$(echo $currBootDiskPart | sed 's/[0-9]*$//')
+    currBootDiskPath=/dev/$currBootDisk
+    curridracVFlash=$(eval $(lsblk -oNAME,MODEL -P | grep "Virtual_Flash"); echo $NAME)
+
+    if [ -z "$curridracVFlash" ]; then
+        disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk"))
+    else
+        echo "I: Current Virtual Flash Disk is '$curridracVFlash'" |& tee -a $LOG_FILE
+        disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk\|$curridracVFlash"))
+    fi
+    echo "I: Current Root Disk is '$currBootDisk'" |& tee -a $LOG_FILE
+    echo "I: Current Root Disk partition is '$currBootDiskPart'" |& tee -a $LOG_FILE
+    echo "I: Current Root Disk Path is '$currBootDiskPath'" |& tee -a $LOG_FILE
+
     let totaldisks=${#disksizes[*]}-1
     if (($NUM_PARITY_DISKS >= $totaldisks)); then
         echo "E: Number of requested parity disks is greater than or equal to total available disks! Please request Parity disks less than $totaldisks!" |& tee -a $LOG_FILE
@@ -73,6 +80,7 @@ function partition_disks() {
     echo "I: Parity disks are: "${paritydisks[@]}"" |& tee -a $LOG_FILE
     echo "I: There are a total of $numdatadisks disks available for data" |& tee -a $LOG_FILE
     echo "I: Data disks are: "${datadisks[@]}"" |& tee -a $LOG_FILE
+
     for i in "${paritydisks[@]}"; do
         local disk=/${tempBootDiskArr[0]}/$i
         block=$(lsblk $disk)
