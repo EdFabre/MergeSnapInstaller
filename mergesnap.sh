@@ -266,12 +266,6 @@ shift "$(($OPTIND - 1))"
 
 echo "I: Starting new Log File" >$LOG_FILE
 
-# Skip pre-reqs for script if flag exists
-if [ "$t_value" = "true" ]; then
-    echo "I: Script running in trial mode! Remove the '-t' flag to run whole script" |& tee -a $LOG_FILE
-    partition_disks
-fi
-
 # Set number of parity disks desired for snapraid
 if [ "$q_value" = "true" -a "$p_value" = "none" ]; then
     echo "I: Script running non-interactively using defaults" |& tee -a $LOG_FILE
@@ -287,6 +281,12 @@ else
 fi
 echo "I: Requested that $NUM_PARITY_DISKS parity disks be made available!" |& tee -a $LOG_FILE
 echo "I: Requested that snapraid alerts be sent to '$SNAPRAID_AUTOMATION_SCRIPT_EMAIL'!" |& tee -a $LOG_FILE
+
+# Skip pre-reqs for script if flag exists
+if [ "$t_value" = "true" ]; then
+    echo "I: Script running in trial mode! Remove the '-t' flag to run whole script" |& tee -a $LOG_FILE
+    partition_disks
+fi
 
 # Install Docker, MergerFS and other neccesary tools
 echo "I: Installing Docker, MergerFS and other neccesary tools." |& tee -a $LOG_FILE
