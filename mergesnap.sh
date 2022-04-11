@@ -284,6 +284,7 @@ echo "I: Requested that snapraid alerts be sent to '$SNAPRAID_AUTOMATION_SCRIPT_
 
 # Install Docker, MergerFS and other neccesary tools
 echo "I: Installing Docker, MergerFS and other neccesary tools." |& tee -a $LOG_FILE
+apt-get install -y lsb-release -qq >/dev/null
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - >/dev/null 2>&1
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 add-apt-repository "deb http://ftp.us.debian.org/debian stretch main contrib"
