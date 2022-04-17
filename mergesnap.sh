@@ -18,7 +18,7 @@
 # Creator: Edge F.
 # Maintainers: Edge F.
 #######################################################################
-set -e
+# set -e
 set -u
 set -o pipefail
 
@@ -52,10 +52,6 @@ function split() {
     unset IFS
 }
 
-function run_exit() {
-    exit 0
-}
-
 function partition_disks() {
     echo "I: Partitioning Disks for Merger-Snapraid" |& tee -a $LOG_FILE
     currBootDiskPart=$(
@@ -69,12 +65,14 @@ function partition_disks() {
         echo $NAME
     )
 
+    set +e
     if [ -z "$curridracVFlash" ]; then
         disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk"))
     else
         echo "I: Current Virtual Flash Disk is '$curridracVFlash'" |& tee -a $LOG_FILE
         disksizes=($(lsblk -d /dev/sd*[a-z] -o NAME -b -x SIZE | grep -v "$currBootDisk\|$curridracVFlash"))
     fi
+    set -e
     echo "I: Current Root Disk is '$currBootDisk'" |& tee -a $LOG_FILE
     echo "I: Current Root Disk partition is '$currBootDiskPart'" |& tee -a $LOG_FILE
     echo "I: Current Root Disk Path is '$currBootDiskPath'" |& tee -a $LOG_FILE
@@ -95,7 +93,7 @@ function partition_disks() {
     # Stop script if flag exists
     if [ "$t_value" = "true" ]; then
         echo "W: Script ending here! Remove the '-t' flag to run whole script" |& tee -a $LOG_FILE
-        run_exit
+        exit 0
     fi
 
     for i in "${paritydisks[@]}"; do
