@@ -52,6 +52,10 @@ function split() {
     unset IFS
 }
 
+function run_exit() {
+    exit 0
+}
+
 function partition_disks() {
     echo "I: Partitioning Disks for Merger-Snapraid" |& tee -a $LOG_FILE
     currBootDiskPart=$(
@@ -91,7 +95,7 @@ function partition_disks() {
     # Stop script if flag exists
     if [ "$t_value" = "true" ]; then
         echo "W: Script ending here! Remove the '-t' flag to run whole script" |& tee -a $LOG_FILE
-        exit 0
+        run_exit
     fi
 
     for i in "${paritydisks[@]}"; do
