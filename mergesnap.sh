@@ -103,7 +103,7 @@ function partition_disks() {
         parted -a optimal -s $disk mklabel gpt mkpart primary ext4 0% 100%
         sleep 2
         if [ "$d_value" = "true" ]; then echo "D: parted /dev/$i" |& tee -a $LOG_FILE; fi
-        disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
+        disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata\|scsi" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
         if [ "$d_value" = "true" ]; then echo "D: disksById[$i]=${disksById[$i]}" |& tee -a $LOG_FILE; fi
         strLength=$(expr length ${disksById[$i]})
         if [ "$d_value" = "true" ]; then echo "D: strLength=$strLength" |& tee -a $LOG_FILE; fi
@@ -119,7 +119,7 @@ function partition_disks() {
         parted -a optimal -s $disk mklabel gpt mkpart primary ext4 0% 100%
         sleep 2
         if [ "$d_value" = "true" ]; then echo "D: parted /dev/$i" |& tee -a $LOG_FILE; fi
-        disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
+        disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata\|scsi" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
         if [ "$d_value" = "true" ]; then echo "D: disksById[$i]=${disksById[$i]}" |& tee -a $LOG_FILE; fi
         strLength=$(expr length ${disksById[$i]})
         if [ "$d_value" = "true" ]; then echo "D: strLength=$strLength" |& tee -a $LOG_FILE; fi
