@@ -97,12 +97,12 @@ function partition_disks() {
     fi
 
     for i in "${paritydisks[@]}"; do
-        local disk=/${tempBootDiskArr[0]}/$i
+        local disk=/dev/$i
         block=$(lsblk $disk)
         echo "I: Boot OS is NOT installed on parity disk '$disk'. Formatting now!" |& tee -a $LOG_FILE
         parted -a optimal -s $disk mklabel gpt mkpart primary ext4 0% 100%
         sleep 2
-        if [ "$d_value" = "true" ]; then echo "D: parted /${tempBootDiskArr[0]}/$i" |& tee -a $LOG_FILE; fi
+        if [ "$d_value" = "true" ]; then echo "D: parted /dev/$i" |& tee -a $LOG_FILE; fi
         disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
         if [ "$d_value" = "true" ]; then echo "D: disksById[$i]=${disksById[$i]}" |& tee -a $LOG_FILE; fi
         strLength=$(expr length ${disksById[$i]})
@@ -113,12 +113,12 @@ function partition_disks() {
         if [ "$d_value" = "true" ]; then echo "D: diskByIdLongestLine=$diskByIdLongestLine" |& tee -a $LOG_FILE; fi
     done
     for i in "${datadisks[@]}"; do
-        local disk=/${tempBootDiskArr[0]}/$i
+        local disk=/dev/$i
         block=$(lsblk $disk)
         echo "I: Boot OS is NOT installed on data disk '$disk'. Formatting now!" |& tee -a $LOG_FILE
         parted -a optimal -s $disk mklabel gpt mkpart primary ext4 0% 100%
         sleep 2
-        if [ "$d_value" = "true" ]; then echo "D: parted /${tempBootDiskArr[0]}/$i" |& tee -a $LOG_FILE; fi
+        if [ "$d_value" = "true" ]; then echo "D: parted /dev/$i" |& tee -a $LOG_FILE; fi
         disksById[$i]=/dev/disk/by-id/$(ls -l /dev/disk/by-id/ | grep "ata" | grep "part1" | grep "$i" | tr -s ' ' | cut -d " " -f9)
         if [ "$d_value" = "true" ]; then echo "D: disksById[$i]=${disksById[$i]}" |& tee -a $LOG_FILE; fi
         strLength=$(expr length ${disksById[$i]})
